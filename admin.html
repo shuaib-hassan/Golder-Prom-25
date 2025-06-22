@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Prom Night 2025</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="admin-page">
+    <header>
+        <nav>
+            <div class="logo">Enchanted Dreams</div>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="admin.html" class="active">Admin</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="admin-panel">
+            <h1>Admin Panel</h1>
+            <div class="admin-card">
+                <h2>Update Event Venue</h2>
+                
+                <div id="admin-alert" class="alert" style="display: none;"></div>
+                
+                <div class="venue-preview">
+                    <h3>Current Venue:</h3>
+                    <p id="venue-preview">Loading...</p>
+                </div>
+
+                <form id="admin-form">
+                    <div class="form-group">
+                        <label for="venue">New Venue</label>
+                        <input type="text" id="venue" required placeholder="e.g., Grand Ballroom, Nairobi Hotel">
+                    </div>
+                    <button type="submit" class="btn-gold">Update Venue</button>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <script src="js/admin.js"></script>
+    <script src="js/shared.js"></script>
+</body>
+</html>

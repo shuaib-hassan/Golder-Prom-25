@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Golden Prom 2025</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css?v=1.2">
+</head>
+<body class="admin-page">
+    <header>
+        <nav>
+            <div class="logo">Golden Prom - Admin</div>
+            <ul>
+                <li><a href="index.html">View Site</a></li>
+                <li><a href="admin-login.html">Login</a></li>
+                <li><a href="admin-panel.html" class="active">Admin Panel</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div class="admin-panel">
+            <h1><i class="fas fa-crown"></i> Prom Night Admin Panel</h1>
+            
+            <!-- Alert Messages -->
+            <div id="admin-alert" class="alert" style="display: none;"></div>
+
+            <!-- Voting Management Section -->
+            <div class="admin-card">
+                <h2><i class="fas fa-vote-yea"></i> Manage Voting Candidates</h2>
+                
+                <!-- Add New Candidate -->
+                <form id="candidate-form" class="admin-form">
+                    <div class="form-group">
+                        <label for="candidate-name">Candidate Name</label>
+                        <input type="text" id="candidate-name" required placeholder="Enter candidate name">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="candidate-type">Category</label>
+                        <select id="candidate-type" required>
+                            <option value="">Select category</option>
+                            <option value="king">Prom King</option>
+                            <option value="queen">Prom Queen</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="candidate-image">Profile Image</label>
+                        <div class="image-selection">
+                            <input type="url" id="candidate-image" placeholder="https://example.com/image.jpg">
+                            <button type="button" id="select-from-gallery" class="btn-transparent">
+                                <i class="fas fa-images"></i> Select from Gallery
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn-gold">Add Candidate</button>
+                </form>
+
+                <!-- Gallery Image Selector Modal -->
+                <div id="gallery-modal" class="modal" style="display: none;">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3>Select Image from Gallery</h3>
+                            <button class="close-modal">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <div id="gallery-selector" class="gallery-selector">
+                                <div class="loading">Loading gallery images...</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Current Candidates -->
+                <div class="candidates-section">
+                    <h3>Current Candidates</h3>
+                    <div id="candidates-list" class="candidates-grid">
+                        <!-- Candidates will be loaded here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Venue Management -->
+            <div class="admin-card">
+                <h2><i class="fas fa-map-marker-alt"></i> Venue Management</h2>
+                <form id="venue-form" class="admin-form">
+                    <div class="form-group">
+                        <label for="venue">Venue Name & Address</label>
+                        <input type="text" id="venue" required placeholder="Enter venue details">
+                    </div>
+                    <button type="submit" class="btn-gold">Update Venue</button>
+                </form>
+                <div id="venue-preview" class="venue-preview">
+                    <h3>Current Venue:</h3>
+                    <p>No venue set yet</p>
+                </div>
+            </div>
+
+            <!-- Statistics -->
+            <div class="admin-card">
+                <h2><i class="fas fa-chart-bar"></i> Event Statistics</h2>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <i class="fas fa-ticket-alt"></i>
+                        <span id="tickets-sold">0</span>
+                        <label>Tickets Sold</label>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-users"></i>
+                        <span id="total-votes">0</span>
+                        <label>Total Votes</label>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-crown"></i>
+                        <span id="total-candidates">0</span>
+                        <label>Total Candidates</label>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-calendar"></i>
+                        <span id="days-until">0</span>
+                        <label>Days Until Event</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Real-time Vote Tracking -->
+            <div class="admin-card">
+                <h2><i class="fas fa-chart-line"></i> Live Vote Tracking</h2>
+                <div class="vote-tracking">
+                    <div class="vote-section">
+                        <h3><i class="fas fa-crown"></i> Prom Kings</h3>
+                        <div id="kings-votes" class="vote-list">
+                            <!-- Kings vote counts will be loaded here -->
+                        </div>
+                    </div>
+                    <div class="vote-section">
+                        <h3><i class="fas fa-crown"></i> Prom Queens</h3>
+                        <div id="queens-votes" class="vote-list">
+                            <!-- Queens vote counts will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+                <div class="refresh-info">
+                    <i class="fas fa-sync-alt"></i>
+                    <span>Auto-refreshing every 10 seconds</span>
+                </div>
+            </div>
+
+            <div class="social-links">
+                <a href="https://www.instagram.com/goldenprom25" target="_blank"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Prom Committee. Admin Panel.</p>
+    </footer>
+
+    <script src="js/admin.js"></script>
+    <script src="js/shared.js"></script>
+    <script src="js/sparkles.js"></script>
+</body>
+</html>

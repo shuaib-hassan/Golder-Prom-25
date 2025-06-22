@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Details - Golden Prom 2025</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="details-page">
+    <header>
+        <nav>
+            <div class="logo">Golden Prom</div>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="details.html" class="active">Details</a></li>
+                <li><a href="gallery.html">Gallery</a></li>
+                <li><a href="vote.html">Vote</a></li>
+                <li><a href="tickets.html">Tickets</a></li>
+                <li><a href="rsvp.html">RSVP</a></li>
+            </ul>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="content-section">
+            <h1>Event Details</h1>
+            <p><strong>Date:</strong> August 24, 2025</p>
+            <p><strong>Time:</strong> 7:00 PM - 12:00 AM</p>
+            <p><strong>Theme:</strong> Enchanted Dreams - Where the Enchanted Forest Meets the Elegant Ballroom</p>
+            <p><strong>Venue:</strong> <span id="current-venue">Loading...</span> (Managed by Admin Panel)</p>
+            <p>Join us for a night of exquisite dining, lively music, and unforgettable moments.</p>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Prom Committee. All rights reserved.</p>
+        <p class="contact-info">📞 Contact: 0742801667</p>
+        <div class="social-links">
+            <a href="https://www.instagram.com/goldenprom25" target="_blank"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+        </div>
+    </footer>
+    <script src="js/shared.js"></script>
+    <script>
+        // Simple client-side fetch for venue details on details.html
+        document.addEventListener('DOMContentLoaded', async function() {
+            const venueElement = document.getElementById('current-venue');
+            if (venueElement) {
+                try {
+                    const response = await fetch('/api/venue');
+                    if (response.ok) {
+                        const data = await response.json();
+                        venueElement.textContent = data.name || 'Venue details not set yet.';
+                    } else {
+                        venueElement.textContent = 'Failed to load venue details.';
+                    }
+                } catch (error) {
+                    console.error('Error fetching venue details:', error);
+                    venueElement.textContent = 'Error loading venue details.';
+                }
+            }
+        });
+    </script>
+</body>
+</html>

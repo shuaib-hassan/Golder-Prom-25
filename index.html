@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Golden Prom 2025 - Enchanted Dreams</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css?v=1.2">
+</head>
+<body class="home">
+    <header>
+        <nav>
+            <div class="logo">Golden Prom</div>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="details.html">Details</a></li>
+                <li><a href="gallery.html">Gallery</a></li>
+                <li><a href="vote.html">Vote</a></li>
+                <li><a href="tickets.html">Tickets</a></li>
+                <li><a href="rsvp.html">RSVP</a></li>
+                <li><a href="admin-login.html" class="admin-link"><i class="fas fa-crown"></i> Admin</a></li>
+            </ul>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="hero-content">
+                <h1>Prom Night 2025</h1>
+                <h2>Enchanted Dreams</h2>
+                <p class="date">August 24, 2025</p>
+                <div class="countdown" id="countdown"></div>
+                <a href="tickets.html" class="btn-glow">Get Tickets</a>
+            </div>
+            <div class="fireflies" id="fireflies"></div>
+            <div class="glow"></div>
+        </section>
+
+        <section class="intro">
+            <h3>Where the Enchanted Forest Meets the Elegant Ballroom</h3>
+            <p>Prepare for an unforgettable night of magic, music, and memories as we transform our venue into a mystical wonderland.</p>
+            <a href="about.html" class="btn-transparent">Discover More</a>
+        </section>
+
+        <section class="venue-section" id="venue-section">
+            <div class="container">
+                <h3><i class="fas fa-map-marker-alt"></i> Event Venue</h3>
+                <div class="venue-info" id="venue-info">
+                    <div class="loading">Loading venue information...</div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; <span id="current-year"></span> Prom Committee. All rights reserved.</p>
+        <p class="contact-info">📞 Contact: 0742801667</p>
+        <div class="social-links">
+            <a href="https://www.instagram.com/goldenprom25" target="_blank"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+        </div>
+    </footer>
+
+    <script src="js/shared.js"></script>
+    <script src="js/countdown.js"></script>
+    <script src="js/fireflies.js"></script>
+    <script>
+        // Load venue information
+        async function loadVenueInfo() {
+            try {
+                const response = await fetch('/api/venue');
+                if (!response.ok) {
+                    throw new Error('Failed to load venue information');
+                }
+                
+                const venueData = await response.json();
+                const venueInfo = document.getElementById('venue-info');
+                
+                if (venueInfo) {
+                    if (venueData.name && venueData.name !== "Venue details not set yet.") {
+                        venueInfo.innerHTML = `
+                            <div class="venue-card">
+                                <i class="fas fa-building"></i>
+                                <h4>${venueData.name}</h4>
+                                <p>Join us at this spectacular venue for an unforgettable prom night experience!</p>
+                            </div>
+                        `;
+                    } else {
+                        venueInfo.innerHTML = `
+                            <div class="venue-card">
+                                <i class="fas fa-clock"></i>
+                                <h4>Venue to be announced</h4>
+                                <p>Stay tuned for venue details! We're working on securing the perfect location for our enchanted prom night.</p>
+                            </div>
+                        `;
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading venue:', error);
+                const venueInfo = document.getElementById('venue-info');
+                if (venueInfo) {
+                    venueInfo.innerHTML = `
+                        <div class="venue-card error">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <h4>Venue information unavailable</h4>
+                            <p>Please check back later for venue details.</p>
+                        </div>
+                    `;
+                }
+            }
+        }
+
+        // Load venue when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            loadVenueInfo();
+        });
+    </script>
+</body>
+</html>

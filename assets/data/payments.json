@@ -1,0 +1,32 @@
+{
+  "payment_methods": [
+    {
+      "id": 1,
+      "name": "M-PESA",
+      "logo": "assets/images/mpesa-logo.png",
+      "instructions": "Complete payment via M-PESA STK Push. You'll receive a prompt on your phone."
+    }
+  ],
+  "ticket_types": [
+    {
+      "id": 1,
+      "name": "Standard",
+      "price": 5000,
+      "features": [
+        "Entry to venue",
+        "Complimentary drink",
+        "Access to photo booth"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "VIP",
+      "price": 6500,
+      "features": [
+        "Priority seating",
+        "Gift package",
+        "VIP lounge access"
+      ]
+    }
+  ]
+}

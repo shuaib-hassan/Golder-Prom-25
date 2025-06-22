@@ -1,0 +1,26 @@
+# M-PESA API Credentials
+# For Sandbox Testing (use these for development)
+CONSUMER_KEY=your_sandbox_consumer_key_here
+CONSUMER_SECRET=your_sandbox_consumer_secret_here
+TILL_NUMBER=174379
+MPESA_PASSKEY=bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919
+
+# For Production (replace with your actual production credentials)
+# CONSUMER_KEY=your_production_consumer_key_here
+# CONSUMER_SECRET=your_production_consumer_secret_here
+# TILL_NUMBER=your_production_till_number
+# MPESA_PASSKEY=your_production_passkey
+
+# Callback URL for M-PESA notifications
+CALLBACK_URL=http://localhost:3000/callback
+
+# Server Configuration
+PORT=3000
+NODE_ENV=development
+
+# Optional: Database configuration (if you add a database later)
+# DB_HOST=localhost
+# DB_PORT=5432
+# DB_NAME=prom_talimar
+# DB_USER=your_db_user
+# DB_PASSWORD=your_db_password 
