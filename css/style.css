@@ -282,7 +282,8 @@ body {
     width: 100%;
     max-width: 450px;
     margin: 0 auto;
-    padding: 2rem;
+    padding: 1rem;
+    min-height: calc(100vh - 200px);
 }
 
 .animated-bg {
@@ -305,8 +306,9 @@ body {
 .login-card {
     background: rgba(255, 255, 255, 0.05);
     backdrop-filter: blur(20px);
-    border-radius: 20px;
-    padding: 3rem 2rem;
+    border-radius: 15px;
+    padding: 1.5rem;
+    margin: 1rem 0;
     border: 1px solid rgba(255, 255, 255, 0.1);
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
     position: relative;
@@ -319,7 +321,7 @@ body {
 }
 
 .login-header i {
-    font-size: 3rem;
+    font-size: 2rem;
     color: #ffd700;
     margin-bottom: 1rem;
     text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
@@ -328,14 +330,14 @@ body {
 
 .login-header h1 {
     color: #fff;
-    font-size: 2rem;
+    font-size: 1.8rem;
     margin-bottom: 0.5rem;
     font-weight: 600;
 }
 
 .login-header p {
     color: rgba(255, 255, 255, 0.7);
-    font-size: 1rem;
+    font-size: 0.9rem;
 }
 
 .login-form {
@@ -365,6 +367,7 @@ body {
     border-radius: 10px;
     overflow: hidden;
     transition: all 0.3s ease;
+    min-height: 48px;
 }
 
 .input-group:focus-within {
@@ -375,8 +378,9 @@ body {
 .input-group i {
     color: rgba(255, 255, 255, 0.5);
     margin-left: 1rem;
-    font-size: 1.1rem;
+    font-size: 1.2rem;
     transition: color 0.3s ease;
+    left: 1rem;
 }
 
 .input-group:focus-within i {
@@ -385,11 +389,11 @@ body {
 
 .input-group input {
     flex: 1;
-    padding: 1rem;
+    padding: 1rem 1rem 1rem 3rem;
     background: transparent;
     border: none;
     color: #fff;
-    font-size: 1rem;
+    font-size: 16px;
     outline: none;
 }
 
@@ -405,6 +409,9 @@ body {
     cursor: pointer;
     transition: color 0.3s ease;
     margin-right: 0.5rem;
+    min-width: 44px;
+    min-height: 44px;
+    right: 0.5rem;
 }
 
 .toggle-password:hover {
@@ -414,12 +421,14 @@ body {
 .login-footer {
     text-align: center;
     color: rgba(255, 255, 255, 0.6);
-    font-size: 0.9rem;
+    font-size: 0.8rem;
+    margin-top: 1.5rem;
 }
 
 .login-footer i {
     margin-right: 0.5rem;
     color: #ffd700;
+    font-size: 0.9rem;
 }
 
 /* Alerts */
@@ -686,6 +695,7 @@ nav ul li a:hover::after {
     background: linear-gradient(45deg, #ffd700, #ffed4e);
     color: #333;
     box-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+    min-height: 48px;
 }
 
 .btn-glow:hover {
@@ -844,11 +854,11 @@ footer {
         z-index: 1000;
         border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     }
-    
+
     nav ul.active {
         display: flex;
     }
-    
+
     nav ul li {
         margin: 0;
         padding: 0;
@@ -864,11 +874,11 @@ footer {
     nav ul li a::after {
         display: none;
     }
-    
+
     .hamburger {
         display: flex;
     }
-    
+
     .hamburger.active span:nth-child(1) {
         transform: rotate(-45deg) translate(-5px, 6px);
     }
@@ -952,8 +962,8 @@ footer {
     }
     
     .login-card {
-        padding: 2rem;
-        margin: 1rem;
+        padding: 1.5rem;
+        margin: 0.5rem;
     }
     
     /* Form improvements for mobile */
@@ -2129,7 +2139,8 @@ footer {
     }
     
     .gallery-grid-selector {
-        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.5rem;
     }
 }
 
@@ -2318,5 +2329,216 @@ footer {
     .login-card {
         padding: 1.5rem;
         margin: 0.5rem;
+    }
+    
+    /* Admin panel specific mobile improvements */
+    .admin-panel {
+        padding: 0.5rem;
+    }
+    
+    .admin-panel h1 {
+        font-size: 1.8rem;
+        margin-bottom: 2rem;
+    }
+    
+    .admin-card h2 {
+        font-size: 1.4rem;
+        flex-direction: column;
+        gap: 0.5rem;
+        text-align: center;
+    }
+    
+    .admin-card h2 i {
+        font-size: 1.2rem;
+    }
+    
+    .admin-form .form-group {
+        margin-bottom: 1rem;
+    }
+    
+    .admin-form input,
+    .admin-form select,
+    .admin-form textarea {
+        padding: 1rem;
+        font-size: 16px;
+        min-height: 48px;
+    }
+    
+    .image-selection {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .image-selection input {
+        margin-bottom: 0.5rem;
+    }
+    
+    .candidates-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .candidate-card {
+        padding: 1rem;
+        text-align: center;
+    }
+    
+    .candidate-image {
+        width: 60px;
+        height: 60px;
+        margin: 0 auto 1rem;
+    }
+    
+    .candidate-actions {
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+    
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+    }
+    
+    .stat-item {
+        padding: 1rem 0.5rem;
+        text-align: center;
+    }
+    
+    .stat-item i {
+        font-size: 1.5rem;
+    }
+    
+    .stat-item span {
+        font-size: 1.5rem;
+    }
+    
+    .stat-item label {
+        font-size: 0.8rem;
+    }
+    
+    .vote-tracking {
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+    
+    .vote-section h3 {
+        font-size: 1.2rem;
+        text-align: center;
+    }
+    
+    .vote-item {
+        padding: 0.8rem;
+        margin-bottom: 0.8rem;
+    }
+    
+    .candidate-info {
+        flex-direction: column;
+        text-align: center;
+        gap: 0.5rem;
+    }
+    
+    .candidate-thumb {
+        width: 50px;
+        height: 50px;
+        margin: 0 auto;
+    }
+    
+    .vote-stats {
+        width: 100%;
+        margin-top: 0.5rem;
+    }
+    
+    .vote-bar {
+        height: 15px;
+    }
+    
+    .vote-count {
+        font-size: 0.9rem;
+    }
+    
+    .vote-percentage {
+        font-size: 0.8rem;
+    }
+    
+    .refresh-info {
+        text-align: center;
+        font-size: 0.8rem;
+    }
+    
+    .modal-content {
+        margin: 0.5rem;
+        padding: 1rem;
+        max-height: 95vh;
+    }
+    
+    .modal-header h3 {
+        font-size: 1.2rem;
+    }
+    
+    .gallery-grid-selector {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.5rem;
+    }
+    
+    .gallery-item-selector {
+        aspect-ratio: 1;
+    }
+    
+    .social-links {
+        gap: 0.8rem;
+    }
+    
+    .social-links a {
+        min-width: 40px;
+        min-height: 40px;
+        font-size: 1rem;
+    }
+}
+
+/* Ultra small devices */
+@media (max-width: 360px) {
+    .admin-panel h1 {
+        font-size: 1.5rem;
+    }
+    
+    .admin-card h2 {
+        font-size: 1.2rem;
+    }
+    
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .candidate-actions {
+        flex-direction: column;
+        width: 100%;
+    }
+    
+    .btn-delete {
+        width: 100%;
+        padding: 0.8rem;
+    }
+    
+    .vote-tracking {
+        padding: 0.5rem;
+    }
+    
+    .vote-item {
+        padding: 0.6rem;
+    }
+    
+    .candidate-thumb {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .vote-bar {
+        height: 12px;
+    }
+    
+    .vote-count,
+    .vote-percentage {
+        font-size: 0.8rem;
     }
 }

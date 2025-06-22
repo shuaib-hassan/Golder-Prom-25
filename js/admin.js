@@ -309,24 +309,24 @@ async function loadStatistics() {
         document.getElementById('total-candidates').textContent = '0';
         document.getElementById('tickets-sold').textContent = '0';
         document.getElementById('days-until').textContent = '0';
+        }
     }
-}
 
-// Show alert message
-function showAlert(message, type) {
-    const alertBox = document.getElementById('admin-alert');
-    if (alertBox) {
-        alertBox.textContent = message;
-        alertBox.className = `alert ${type}`;
-        alertBox.style.display = 'block';
-        
-        setTimeout(() => {
-            alertBox.style.display = 'none';
-        }, 3000);
-    } else {
-        alert(message);
+    // Show alert message
+    function showAlert(message, type) {
+        const alertBox = document.getElementById('admin-alert');
+        if (alertBox) {
+            alertBox.textContent = message;
+            alertBox.className = `alert ${type}`;
+            alertBox.style.display = 'block';
+            
+            setTimeout(() => {
+                alertBox.style.display = 'none';
+            }, 3000);
+        } else {
+            alert(message);
+        }
     }
-}
 
 // Gallery Modal Functions
 async function openGalleryModal() {

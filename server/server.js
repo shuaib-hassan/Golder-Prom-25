@@ -12,8 +12,8 @@ const PORT = process.env.PORT || 3000;
 
 // Middleware
 app.use(cors());
-app.use(express.static(path.join(__dirname, '..')));
-app.use(express.json()); // For parsing application/json
+app.use(express.static(path.join(__dirname, '..'))); 
+app.use(express.json()); // For parsing application/json 
 
 // Configure multer for file uploads
 const storage = multer.diskStorage({
@@ -141,7 +141,7 @@ app.get('/api/payments', async (req, res) => {
         res.json(parsed);
     } catch (error) {
         // This is where the server-side error (e.g., ENOENT if file not found) is logged
-        console.error('Error reading payments file:', error);
+        console.error('Error reading payments file:', error); 
         res.status(500).json({ 
             error: 'Failed to retrieve payment information', 
             details: error.message, 
@@ -187,7 +187,7 @@ app.post('/api/purchase-ticket', async (req, res) => {
             tickets = JSON.parse(data);
         } catch (readError) {
             if (readError.code !== 'ENOENT') {
-                throw readError;
+                throw readError; 
             }
             // If file doesn't exist, tickets remains an empty array
         }
@@ -199,7 +199,7 @@ app.post('/api/purchase-ticket', async (req, res) => {
             phone: formattedPhone, // Store the formatted phone number
             ticketType,
             quantity,
-            amount,
+            amount, 
             paymentMethod,
             purchaseDate: new Date().toISOString(),
             paymentStatus: paymentMethod === 'M-PESA' ? 'M-PESA_INITIATED' : 'PENDING'
@@ -264,8 +264,8 @@ app.post('/stkpush', async (req, res) => {
         while (retries > 0) {
             try {
                 const stkResponse = await axios.post(
-                    process.env.NODE_ENV === 'production'
-                        ? 'https://api.safaricom.co.ke/mpesa/stkpush/v1/processrequest'
+                    process.env.NODE_ENV === 'production' 
+                        ? 'https://api.safaricom.co.ke/mpesa/stkpush/v1/processrequest' 
                         : 'https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest',
                     {
                         BusinessShortCode: process.env.TILL_NUMBER,
@@ -274,7 +274,7 @@ app.post('/stkpush', async (req, res) => {
                         TransactionType: 'CustomerPayBillOnline',
                         Amount: amount,
                         PartyA: formattedPhone,
-                        PartyB: process.env.TILL_NUMBER,
+                        PartyB: process.env.TILL_NUMBER, 
                         PhoneNumber: formattedPhone,
                         CallBackURL: process.env.CALLBACK_URL || 'http://localhost:3000/callback',
                         AccountReference: 'PROM2025',
@@ -316,8 +316,8 @@ app.post('/stkpush', async (req, res) => {
                 solution: 'This is usually a temporary issue. Please retry the payment.'
             });
         } else {
-            console.error('STK Push error:', error.response?.data || error.message);
-            res.status(500).json({ error: 'Payment processing failed' });
+        console.error('STK Push error:', error.response?.data || error.message);
+        res.status(500).json({ error: 'Payment processing failed' });
         }
     }
 });
@@ -338,8 +338,8 @@ app.post('/verify', async (req, res) => {
 
         // Add timeout for verification
         const response = await axios.post(
-            process.env.NODE_ENV === 'production'
-                ? 'https://api.safaricom.co.ke/mpesa/stkpushquery/v1/query'
+            process.env.NODE_ENV === 'production' 
+                ? 'https://api.safaricom.co.ke/mpesa/stkpushquery/v1/query' 
                 : 'https://sandbox.safaricom.co.ke/mpesa/stkpushquery/v1/query',
             {
                 BusinessShortCode: process.env.TILL_NUMBER,
@@ -370,9 +370,9 @@ app.post('/verify', async (req, res) => {
 
             const updatedTickets = tickets.map(ticket => {
                 if (ticket.paymentStatus === 'M-PESA_INITIATED' && mpesaResponse.ResultCode === '0') {
-                    return {
-                        ...ticket,
-                        paymentStatus: 'PAID',
+                    return { 
+                        ...ticket, 
+                        paymentStatus: 'PAID', 
                         mpesaReceipt: mpesaResponse.MpesaReceiptNumber,
                         paymentDate: new Date().toISOString()
                     };
@@ -674,7 +674,7 @@ app.post('/api/gallery/:id/like', async (req, res) => {
         try {
             const data = await fs.readFile(GALLERY_FILE, 'utf8');
             gallery = JSON.parse(data);
-        } catch (readError) {
+            } catch (readError) {
             if (readError.code !== 'ENOENT') {
                 throw readError;
             }

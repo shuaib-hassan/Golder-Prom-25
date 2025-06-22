@@ -24,14 +24,14 @@ document.addEventListener('DOMContentLoaded', function () {
                 body.style.overflow = 'hidden';
             } else {
                 body.style.overflow = '';
-            }
+    }
         });
 
         // Close hamburger menu when a link is clicked
-        navUl.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-                navUl.classList.remove('active');
-                hamburger.classList.remove('active');
+    navUl.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => {
+            navUl.classList.remove('active');
+            hamburger.classList.remove('active');
                 body.style.overflow = '';
             });
         });

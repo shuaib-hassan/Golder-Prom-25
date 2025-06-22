@@ -56,12 +56,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
             // Mark as voted locally
             localStorage.setItem(`hasVoted_${voterId}`, 'true');
-            
+        
             showVoteAlert('Thank you for voting! Your vote has been recorded.', 'success');
-            
-            // Reload the page to show the "already voted" message
+        
+        // Reload the page to show the "already voted" message
             setTimeout(() => {
-                window.location.reload();
+        window.location.reload();
             }, 2000);
         } catch (error) {
             console.error('Error submitting vote:', error);
