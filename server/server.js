@@ -13,7 +13,7 @@ const PORT = process.env.PORT || 3000;
 // Middleware
 app.use(cors());
 app.use(express.static(path.join(__dirname, '..'))); 
-app.use(express.json()); // For parsing application/json 
+app.use(express.json({ limit: '10mb' })); // For parsing application/json with larger limits
 
 // Configure multer for file uploads
 const storage = multer.diskStorage({
@@ -53,6 +53,7 @@ const PAYMENTS_FILE = path.join(__dirname, '..', 'assets', 'data', 'payments.jso
 const CANDIDATES_FILE = path.join(__dirname, 'data', 'candidates.json');
 const VOTES_FILE = path.join(__dirname, 'data', 'votes.json');
 const GALLERY_FILE = path.join(__dirname, 'data', 'gallery.json');
+const ANNOUNCEMENTS_FILE = path.join(__dirname, 'data', 'announcements.json');
 
 // --- Helper Functions ---
 
@@ -412,17 +413,25 @@ app.get('/api/candidates', async (req, res) => {
 
 // Endpoint to add a new candidate (Admin only)
 app.post('/api/candidates', async (req, res) => {
-    const { name, type, imageUrl } = req.body;
-
-    // Input validation
-    if (!name || typeof name !== 'string') {
-        return res.status(400).json({ error: 'Name is required and must be a string' });
-    }
-    if (!type || !['king', 'queen'].includes(type)) {
-        return res.status(400).json({ error: 'Type must be either "king" or "queen"' });
-    }
-
     try {
+        const { name, type, imageUrl } = req.body;
+
+        // Input validation
+        if (!name || typeof name !== 'string') {
+            return res.status(400).json({ error: 'Name is required and must be a string' });
+        }
+        if (!type || !['king', 'queen'].includes(type)) {
+            return res.status(400).json({ error: 'Type must be either "king" or "queen"' });
+        }
+
+        // Check image URL size if provided
+        if (imageUrl && imageUrl.length > 5000000) { // 5MB limit for data URLs
+            return res.status(400).json({ 
+                error: 'Image is too large. Please use a smaller image or upload it to the gallery first.',
+                maxSize: '5MB'
+            });
+        }
+
         let candidates = [];
         try {
             const data = await fs.readFile(CANDIDATES_FILE, 'utf8');
@@ -454,7 +463,16 @@ app.post('/api/candidates', async (req, res) => {
         res.status(201).json({ message: 'Candidate added successfully', candidate: newCandidate });
     } catch (error) {
         console.error('Error adding candidate:', error);
-        res.status(500).json({ error: 'Failed to add candidate' });
+        
+        // Provide more specific error messages
+        if (error.type === 'entity.too.large') {
+            res.status(413).json({ 
+                error: 'Image data is too large. Please use a smaller image or upload it to the gallery first.',
+                suggestion: 'Try compressing the image or using a lower resolution version.'
+            });
+        } else {
+            res.status(500).json({ error: 'Failed to add candidate', details: error.message });
+        }
     }
 });
 
@@ -734,10 +752,129 @@ app.delete('/api/gallery/:id', async (req, res) => {
     }
 });
 
+// Announcement Management Endpoints
+
+// Get current announcement
+app.get('/api/announcements', async (req, res) => {
+    try {
+        const data = await fs.readFile(ANNOUNCEMENTS_FILE, 'utf8');
+        const announcements = JSON.parse(data);
+        res.json(announcements);
+    } catch (error) {
+        if (error.code === 'ENOENT') {
+            // If announcements.json doesn't exist, return empty
+            return res.json({ current: null, history: [] });
+        }
+        console.error('Error reading announcements file:', error);
+        res.status(500).json({ error: 'Failed to retrieve announcements' });
+    }
+});
+
+// Create new announcement (Admin only)
+app.post('/api/announcements', async (req, res) => {
+    const { message, type = 'info' } = req.body;
+    
+    if (!message || typeof message !== 'string') {
+        return res.status(400).json({ error: 'Message is required' });
+    }
+    
+    try {
+        let announcements = { current: null, history: [] };
+        try {
+            const data = await fs.readFile(ANNOUNCEMENTS_FILE, 'utf8');
+            announcements = JSON.parse(data);
+        } catch (readError) {
+            if (readError.code !== 'ENOENT') {
+                throw readError;
+            }
+        }
+
+        // If there's a current announcement, move it to history
+        if (announcements.current) {
+            announcements.history.unshift({
+                ...announcements.current,
+                endedAt: new Date().toISOString()
+            });
+        }
+
+        // Create new announcement
+        const newAnnouncement = {
+            id: Date.now(),
+            message: message.trim(),
+            type: type, // 'info', 'warning', 'emergency'
+            createdAt: new Date().toISOString(),
+            createdBy: 'admin' // You could add user info here later
+        };
+
+        announcements.current = newAnnouncement;
+        
+        // Keep only last 10 announcements in history
+        if (announcements.history.length > 10) {
+            announcements.history = announcements.history.slice(0, 10);
+        }
+
+        await fs.writeFile(ANNOUNCEMENTS_FILE, JSON.stringify(announcements, null, 2), 'utf8');
+        
+        res.status(201).json({ 
+            message: 'Announcement created successfully', 
+            announcement: newAnnouncement 
+        });
+    } catch (error) {
+        console.error('Error creating announcement:', error);
+        res.status(500).json({ error: 'Failed to create announcement' });
+    }
+});
+
+// Remove current announcement (Admin only)
+app.delete('/api/announcements/current', async (req, res) => {
+    try {
+        let announcements = { current: null, history: [] };
+        try {
+            const data = await fs.readFile(ANNOUNCEMENTS_FILE, 'utf8');
+            announcements = JSON.parse(data);
+        } catch (readError) {
+            if (readError.code !== 'ENOENT') {
+                throw readError;
+            }
+        }
+
+        if (announcements.current) {
+            // Move current announcement to history
+            announcements.history.unshift({
+                ...announcements.current,
+                endedAt: new Date().toISOString()
+            });
+            announcements.current = null;
+            
+            await fs.writeFile(ANNOUNCEMENTS_FILE, JSON.stringify(announcements, null, 2), 'utf8');
+            
+            res.json({ message: 'Announcement removed successfully' });
+        } else {
+            res.status(404).json({ error: 'No current announcement to remove' });
+        }
+    } catch (error) {
+        console.error('Error removing announcement:', error);
+        res.status(500).json({ error: 'Failed to remove announcement' });
+    }
+});
+
+// Global error handler for payload size errors
+app.use((error, req, res, next) => {
+    if (error.type === 'entity.too.large') {
+        return res.status(413).json({
+            error: 'Request payload is too large',
+            message: 'The image or data you are trying to send is too large. Please use a smaller image or upload it to the gallery first.',
+            suggestion: 'Try compressing the image or using a lower resolution version.'
+        });
+    }
+    next(error);
+});
+
 // Start the server
-app.listen(PORT, () => {
-    console.log(`🚀 Server is running on http://localhost:${PORT}`);
+app.listen(PORT, '0.0.0.0', () => {
+    console.log(`🚀 Server is running on http://0.0.0.0:${PORT}`);
     console.log(`🌐 Access the website at: http://localhost:${PORT}/`);
+    console.log(`📱 Mobile access: http://192.168.0.15:${PORT}/`);
     console.log(`🔧 Access the admin panel at: http://localhost:${PORT}/admin.html`);
     console.log(`📱 M-PESA integration: ${process.env.CONSUMER_KEY ? 'Configured' : 'Not configured'}`);
 });

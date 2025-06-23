@@ -11,7 +11,13 @@
 <body class="home">
     <header>
         <nav>
-            <div class="logo">Golden Prom</div>
+            <div class="logo-container">
+                <div class="logo">Golden Prom</div>
+                <a href="admin-login.html" class="admin-btn-mobile">
+                    <i class="fas fa-crown"></i>
+                    <span>Admin</span>
+                </a>
+            </div>
             <ul>
                 <li><a href="index.html">Home</a></li>
                 <li><a href="about.html">About</a></li>
@@ -31,6 +37,17 @@
     </header>
 
     <main>
+        <!-- Emergency Announcement Section -->
+        <div id="announcement-banner" class="announcement-banner" style="display: none;">
+            <div class="announcement-content">
+                <i class="announcement-icon"></i>
+                <span class="announcement-message"></span>
+                <button class="announcement-close" onclick="closeAnnouncement()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </div>
+
         <section class="hero">
             <div class="hero-content">
                 <h1>Prom Night 2025</h1>
@@ -76,16 +93,20 @@
         // Load venue information
         async function loadVenueInfo() {
             try {
-                const response = await fetch('/api/venue');
+                console.log('Loading venue information...');
+                // Add cache-busting parameter
+                const response = await fetch(`/api/venue?t=${Date.now()}`);
                 if (!response.ok) {
                     throw new Error('Failed to load venue information');
                 }
                 
                 const venueData = await response.json();
+                console.log('Venue data received:', venueData);
                 const venueInfo = document.getElementById('venue-info');
                 
                 if (venueInfo) {
                     if (venueData.name && venueData.name !== "Venue details not set yet.") {
+                        console.log('Displaying venue:', venueData.name);
                         venueInfo.innerHTML = `
                             <div class="venue-card">
                                 <i class="fas fa-building"></i>
@@ -94,6 +115,7 @@
                             </div>
                         `;
                     } else {
+                        console.log('No venue set, showing placeholder');
                         venueInfo.innerHTML = `
                             <div class="venue-card">
                                 <i class="fas fa-clock"></i>
@@ -121,7 +143,60 @@
         // Load venue when page loads
         document.addEventListener('DOMContentLoaded', function() {
             loadVenueInfo();
+            loadAnnouncement();
+            
+            // Listen for venue updates from admin panel
+            window.addEventListener('venueUpdated', function(event) {
+                console.log('Venue updated event received:', event.detail);
+                loadVenueInfo();
+            });
         });
+
+        // Load and display announcement
+        async function loadAnnouncement() {
+            try {
+                const response = await fetch('/api/announcements');
+                if (!response.ok) {
+                    throw new Error('Failed to load announcements');
+                }
+                
+                const data = await response.json();
+                const banner = document.getElementById('announcement-banner');
+                const message = document.querySelector('.announcement-message');
+                const icon = document.querySelector('.announcement-icon');
+                
+                if (data.current && banner && message && icon) {
+                    message.textContent = data.current.message;
+                    
+                    // Set icon and styling based on announcement type
+                    switch (data.current.type) {
+                        case 'emergency':
+                            icon.className = 'fas fa-exclamation-triangle announcement-icon';
+                            banner.className = 'announcement-banner emergency';
+                            break;
+                        case 'warning':
+                            icon.className = 'fas fa-exclamation-circle announcement-icon';
+                            banner.className = 'announcement-banner warning';
+                            break;
+                        default:
+                            icon.className = 'fas fa-info-circle announcement-icon';
+                            banner.className = 'announcement-banner info';
+                    }
+                    
+                    banner.style.display = 'block';
+                }
+            } catch (error) {
+                console.error('Error loading announcement:', error);
+            }
+        }
+
+        // Close announcement
+        function closeAnnouncement() {
+            const banner = document.getElementById('announcement-banner');
+            if (banner) {
+                banner.style.display = 'none';
+            }
+        }
     </script>
 </body>
 </html>

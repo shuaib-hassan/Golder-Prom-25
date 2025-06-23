@@ -13,11 +13,15 @@ document.addEventListener('DOMContentLoaded', function() {
     loginForm.addEventListener('submit', handleLogin);
 });
 
+// Allowed admin usernames
+const ALLOWED_ADMIN_USERNAMES = ['nate', 'talimar', 'shuaib'];
+const ADMIN_PASSWORD = 'Talimar@123';
+
 // Handle login
 function handleLogin(e) {
     e.preventDefault();
     
-    const username = document.getElementById('username').value.trim();
+    const username = document.getElementById('username').value.trim().toLowerCase();
     const password = document.getElementById('password').value;
     
     // Simple validation
@@ -26,8 +30,16 @@ function handleLogin(e) {
         return;
     }
     
-    // Check credentials (you can change the username, password is "Talimar@123")
-    if (password === 'Talimar@123') {
+    // Check if username is allowed
+    if (!ALLOWED_ADMIN_USERNAMES.includes(username)) {
+        showLoginAlert('Invalid username. Only authorized users can access admin panel.', 'error');
+        document.getElementById('username').value = '';
+        document.getElementById('username').focus();
+        return;
+    }
+    
+    // Check password
+    if (password === ADMIN_PASSWORD) {
         // Store login session
         const session = {
             username: username,
@@ -36,14 +48,14 @@ function handleLogin(e) {
         };
         localStorage.setItem('adminSession', JSON.stringify(session));
         
-        showLoginAlert('Login successful! Redirecting...', 'success');
+        showLoginAlert(`Welcome ${username}! Login successful! Redirecting...`, 'success');
         
         // Redirect to admin panel after short delay
         setTimeout(() => {
             redirectToAdmin();
         }, 1500);
     } else {
-        showLoginAlert('Invalid credentials. Please try again.', 'error');
+        showLoginAlert('Invalid password. Please try again.', 'error');
         document.getElementById('password').value = '';
         document.getElementById('password').focus();
     }

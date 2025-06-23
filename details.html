@@ -56,11 +56,16 @@
             const venueElement = document.getElementById('current-venue');
             if (venueElement) {
                 try {
-                    const response = await fetch('/api/venue');
+                    console.log('Loading venue details for details page...');
+                    // Add cache-busting parameter
+                    const response = await fetch(`/api/venue?t=${Date.now()}`);
                     if (response.ok) {
                         const data = await response.json();
+                        console.log('Venue data for details page:', data);
                         venueElement.textContent = data.name || 'Venue details not set yet.';
+                        console.log('Venue displayed:', venueElement.textContent);
                     } else {
+                        console.error('Failed to load venue details');
                         venueElement.textContent = 'Failed to load venue details.';
                     }
                 } catch (error) {
@@ -68,7 +73,37 @@
                     venueElement.textContent = 'Error loading venue details.';
                 }
             }
+            
+            // Listen for venue updates from admin panel
+            window.addEventListener('venueUpdated', function(event) {
+                console.log('Venue updated event received on details page:', event.detail);
+                // Reload venue details
+                if (venueElement) {
+                    loadVenueDetails();
+                }
+            });
         });
+        
+        // Function to reload venue details
+        async function loadVenueDetails() {
+            const venueElement = document.getElementById('current-venue');
+            if (venueElement) {
+                try {
+                    console.log('Reloading venue details...');
+                    const response = await fetch(`/api/venue?t=${Date.now()}`);
+                    if (response.ok) {
+                        const data = await response.json();
+                        console.log('Updated venue data:', data);
+                        venueElement.textContent = data.name || 'Venue details not set yet.';
+                    } else {
+                        venueElement.textContent = 'Failed to load venue details.';
+                    }
+                } catch (error) {
+                    console.error('Error reloading venue details:', error);
+                    venueElement.textContent = 'Error loading venue details.';
+                }
+            }
+        }
     </script>
 </body>
 </html>

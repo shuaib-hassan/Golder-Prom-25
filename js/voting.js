@@ -168,6 +168,11 @@ function createVotingCard(candidate, type) {
         'https://via.placeholder.com/100x100/ffd700/1a1333?text=👑' : 
         'https://via.placeholder.com/100x100/ff6b9d/1a1333?text=👑';
     
+    const instagramLink = candidate.instagramUsername ? 
+        `<a href="https://instagram.com/${candidate.instagramUsername}" target="_blank" class="instagram-link" title="View ${candidate.name}'s Instagram">
+            <i class="fab fa-instagram"></i>
+        </a>` : '';
+    
     card.innerHTML = `
         <div class="candidate-image-container">
             <img src="${candidate.imageUrl || defaultImage}" alt="${candidate.name}" class="candidate-img" onerror="this.src='${defaultImage}'">
@@ -175,8 +180,11 @@ function createVotingCard(candidate, type) {
                 <i class="fas fa-check"></i>
             </div>
         </div>
-        <h4>${candidate.name}</h4>
-        <p class="vote-count">Votes: ${candidate.votes || 0}</p>
+        <div class="candidate-info">
+            <h4>${candidate.name}</h4>
+            <p class="vote-count">Votes: ${candidate.votes || 0}</p>
+            ${instagramLink}
+        </div>
         <input type="radio" name="${type}" value="${candidate.name}" id="${candidate.id}" required>
         <label for="${candidate.id}" class="vote-label">Vote for ${candidate.name}</label>
     `;
